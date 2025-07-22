@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DigitalOpti Fiche Client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+               /* Styles généraux basés sur votre exemple */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif; /* Utilisation de la police "Segoe UI" */
+        }
+
+        body {
+            background-color: #f4f6f8; /* Couleur de fond du corps */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Aligner en haut */
+            min-height: 100vh; /* Hauteur minimale pour prendre toute la vue */
+            padding: 20px; /* Ajout d'un padding autour du dashboard */
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 1000px; /* Limite la largeur pour une meilleure lisibilité */
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding-bottom: 80px; /* Espace pour le sticky footer */
+            display: flex; /* Le dashboard devient un flex container pour son contenu */
+            flex-direction: column;
+        }
+
+        .content {
+            padding: 25px;
+            flex-grow: 1; /* Permet au contenu de prendre l'espace restant */
+        }
+
+        /* En-tête */
+        .header {
+            background-color: #ffffff; /* Couleur de fond de l'en-tête */
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            color: #14213d; /* Couleur du texte dans l'en-tête */
+            border-top-left-radius: 12px; /* Conserver les coins arrondis */
+            border-top-right-radius: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Espace entre le nom d'utilisateur et l'icône */
+            font-weight: bold;
+            color: #14213d; /* Couleur du texte de l'utilisateur */
+        }
+
+        .logo {
+            height: 40px; /* Taille du logo */
+            border-radius: 8px; /* Coins arrondis pour le logo */
+        }
+
+        /* Titres de section */
+        .section-title {
+            color: #14213d; /* Couleur de titre plus foncée */
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* Lignes de formulaire */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .required-field::after {
+            content: ' *';
+            color: red;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #1b9aaa; /* Couleur de focus assortie au nouveau thème */
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Styles spécifiques pour le contact */
+        .form-group > div {
+            display: flex;
+            gap: 8px;
+        }
+
+        .form-group > div input[name="indicatif"] {
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        /* Tableau de prescription */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #1b9aaa; /* Couleur d'en-tête de tableau assortie */
+            color: white;
+            font-weight: bold;
+        }
+
+        td select {
+            border: none;
+            background: transparent;
+            padding: 0;
+            font-size: 1rem;
+            border-radius: 0;
+        }
+
+        /* Section Paiement et Livraison */
+        .payment-section, .delivery-section {
+            margin-top: 30px;
+        }
+
+        .payment-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .payment-group {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .payment-highlight .payment-group input {
+            background-color: #e6f2ff; /* Légèrement teinté pour les totaux */
+            font-weight: bold;
+        }
+
+        .discount-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .discount-selector input {
+            flex: 2;
+        }
+
+        .discount-selector select {
+            flex: 1;
+            max-width: 80px;
+        }
+
+        /* Actions du formulaire (sticky footer) */
+        .form-actions-sticky {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 15px 25px;
+            /* Modifié pour un effet plus "flottant" */
+            box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.1);
+            z-index: 900; /* Assure qu'il est au-dessus du contenu */
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid #e0e0e0;
+            box-sizing: border-box;
+        }
+
+        .btn-save, .btn-cancel, .btn-reset {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background-color: #1b9aaa; /* Vert-bleu pour enregistrer */
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #147f8c;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background-color: #f77f00; /* Orange pour annuler */
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #d86c00;
+            transform: translateY(-2px);
+        }
+
+        .btn-reset {
+            background-color: #6c757d; /* Gris pour réinitialiser */
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Message box pour les confirmations */
+        .message-box {
+            display: none; /* Caché par défaut */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .message-box p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .message-box button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .message-box .btn-confirm {
+            background-color: #1b9aaa; /* Couleur de confirmation assortie */
+            color: white;
+        }
+
+        .message-box .btn-cancel-modal {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        /* Overlay pour le message box */
+        .overlay {
+            display: none; /* Caché par défaut */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .form-group, .payment-group {
+                min-width: 100%;
+            }
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            .header-right {
+                margin-top: 10px;
+            }
+            .form-actions-sticky {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .btn-save, .btn-cancel, .btn-reset {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding-bottom: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            padding: 25px;
+            flex-grow: 1;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            color: #14213d;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: bold;
+            color: #14213d;
+        }
+
+        .logo {
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            color: #14213d;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .required-field::after {
+            content: ' *';
+            color: red;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #1b9aaa;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Styles pour le mode consultation */
+        .consultation-mode {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+        
+        .consultation-mode input,
+        .consultation-mode select,
+        .consultation-mode textarea {
+            background-color: #f5f5f5 !important;
+            color: #666 !important;
+            border-color: #ddd !important;
+            pointer-events: none;
+        }
+
+        /* Styles pour les boutons de mode */
+        .mode-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: flex-end;
+        }
+        
+        .btn-edit {
+            background-color: #1b9aaa;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-delete {
+            background-color: #e63946;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-actions-sticky {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 15px 25px;
+            box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.1);
+            z-index: 900;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-save, .btn-cancel {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background-color: #1b9aaa;
+            color: white;
+            display: none; /* Caché par défaut */
+        }
+
+        .btn-cancel {
+            background-color: #f77f00;
+            color: white;
+        }
+
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+            .form-actions-sticky {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            .btn-save, .btn-cancel, .btn-edit, .btn-delete {
+                width: 100%;
+                justify-content: center;
+            }
+            .mode-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="content">
+            <header class="header">
+                <div class="header-left">
+                    <div class="user-info">
+                       <span id="username-display"></span>
+                        <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <img src="logo1.png" alt="Logo" class="logo">
+                </div>
+            </header>
+            
+            <form id="client-form" method="POST" class="consultation-mode">
+                <input type="hidden" name="source" value="web_form">
+                <input type="hidden" name="rowIndex" id="rowIndex">
+                
+                <div class="mode-buttons">
+                    <button type="button" id="editButton" class="btn-edit">
+                        <i class="fas fa-edit"></i> Modifier
+                    </button>
+                    <button type="button" id="deleteButton" class="btn-delete">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </div>
+                
+<h2 class="section-title">INFORMATION CLIENT</h2>
+<div class="form-row">
+    <!-- Nom -->
+    <div class="form-group">
+        <label for="nom_complet" class="required-field">Nom complet du client</label>
+        <input type="text" name="nom_complet" id="nom_complet" required />
+    </div>
+
+    <!-- Contact -->
+    <div class="form-group">
+        <label class="required-field">Contact</label>
+        <div>
+            <input type="tel" name="numero" id="numero" placeholder="2290163333964" required />
+        </div>
+    </div>
+
+    <!-- Né le -->
+    <div class="form-group">
+        <label for="date_naissance" class="required-field">Né le</label>
+        <input type="date" name="date_naissance" id="date_naissance" required />
+    </div>
+</div>
+
+<div class="form-row">
+    <!-- Entreprise -->
+    <div class="form-group">
+        <label for="entreprise">Entreprise</label>
+        <select name="entreprise" id="entreprise">
+            <option value="">-- Choisir --</option>
+        </select>
+    </div>
+
+    <!-- Civilité -->
+    <div class="form-group">
+        <label for="civilite" class="required-field">Civilité</label>
+        <select name="civilite" id="civilite" required>
+            <option value="M.">M.</option>
+            <option value="Mme">Mme</option>
+            <option value="Mlle">Mlle</option>
+        </select>
+    </div>
+    
+    <!-- Agence -->
+    <div class="form-group">
+        <label for="agence" class="required-field">Agence</label>
+        <select name="agence" id="agence" required>
+            <option value="">-- Choisir --</option>
+            <option value="cotonou">Cotonou</option>
+        </select>
+    </div>
+    
+    <!-- commercial -->
+    <div class="form-group">
+        <label for="commercial" class="required-field">Commercial</label>
+        <select name="commercial" id="commercial" required>
+            <option value="">-- Commercial --</option>
+        </select>
+    </div>
+</div>
+
+<h2 class="section-title">PRESCRIPTION ET COMMANDE</h2>
+<div class="form-row">
+    <div class="form-group">
+        <label for="type_verre" class="required-field">Type de Verre</label>
+        <select name="type_verre" id="type_verre" required>
+            <option value="">-- Type de Verre --</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="gamme_verre" class="required-field">Gamme des Verres</label>
+        <select name="gamme_verre" id="gamme_verre" required>
+            <option value="">-- Gamme --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="choix_monture" class="required-field">Choix de Monture</label>
+        <select name="choix_monture" id="choix_monture" required>
+            <option value="">-- Choix de Monture --</option>
+        </select>
+    </div>
+</div>
+
+<div style="overflow-x: auto;">
+    <table>
+        <thead>
+            <tr>
+                <th>Œil</th>
+                <th>Sphere</th>
+                <th>Cylindre</th>
+                <th>Axe</th>
+                <th>ADD</th>
+                <th>DP</th>
+                <th>Hauteur</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- OD -->
+            <tr>
+                <td>OD</td>
+
+                <!-- Sphere -->
+                <td>
+                    <select name="od_sphere" required style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Cylindre -->
+                <td>
+                    <select name="od_cylindre" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Axe -->
+                <td>
+                    <select name="od_axe" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- ADD -->
+                <td>
+                    <select name="od_add" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Dp -->
+                <td>
+                    <input type="number" name="od_dp" style="width: 100%;" value="0" min="0">
+                </td>
+
+                <!-- Hauteur -->
+                <td>
+                    <input type="number" name="od_hauteur" style="width: 100%;" value="0" min="0">
+                </td>
+            </tr>
+
+            <!-- OG -->
+            <tr>
+                <td>OG</td>
+
+                <!-- Sphere -->
+                <td>
+                    <select name="og_sphere" required style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Cylindre -->
+                <td>
+                    <select name="og_cylindre" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Axe -->
+                <td>
+                    <select name="og_axe" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- ADD -->
+                <td>
+                    <select name="og_add" style="width: 100%;">
+                        <option value="">-- Choisir --</option>
+                    </select>
+                </td>
+
+                <!-- Dp -->
+                <td>
+                    <input type="number" name="og_dp" style="width: 100%;" value="0" min="0">
+                </td>
+
+                <!-- Hauteur -->
+                <td>
+                    <input type="number" name="og_hauteur" style="width: 100%;" value="0" min="0">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Clinique & Ophtalmo -->
+<div class="form-row" style="margin-top: 1.5rem;">
+    <div class="form-group">
+        <label for="clinique">Clinique</label>
+        <select name="clinique" id="clinique">
+            <option value="">-- Choisir --</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="ophtalmo">Ophtalmo</label>
+        <select name="ophtalmo" id="ophtalmo">
+            <option value="">-- Choisir --</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="date_soin">Date de soin</label>
+        <input type="date" name="date_soin" id="date_soin" />
+    </div>
+</div>
+
+<h2 class="section-title">TIER PAYANT</h2>
+<div class="form-row">
+    <!-- Assurance -->
+    <div class="form-group">
+        <label>Assurance</label>
+        <select name="assurance" id="assurance">
+            <option value="">-- Choisir --</option>
+        </select>
+    </div>
+    
+    <!-- Compagnie -->
+    <div class="form-group">
+        <label>Compagnie</label>
+        <select name="compagnie" id="compagnie">
+            <option value="">-- Choisir --</option>
+        </select>
+    </div>
+    
+    <!-- N° Police -->
+    <div class="form-group">
+        <label>N° Police</label>
+        <input type="text" name="numero_police" placeholder="Numéro de police d'assurance" />
+    </div>
+    
+    <!-- Taux de couverture -->
+    <div class="form-group">
+        <label>Taux de couverture (%)</label>
+        <input type="number" name="taux_couverture" placeholder="Ex: 80" min="0" max="100" />
+    </div>
+    
+    <!-- Assuré Principal -->
+    <div class="form-group">
+        <label>Assuré Principal</label>
+        <select name="assure_principal">
+            <option value="">-- Choisir --</option>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+        </select>
+    </div>
+</div>
+
+<div class="payment-section">
+    <h2 class="section-title">INFORMATION DE PAIEMENT</h2>
+    
+    <div class="payment-row">
+        <div class="payment-group">
+            <label class="payment-label required-field">Montant Monture (FCFA)</label>
+            <input type="number" class="payment-input" name="montant_monture" id="montant_monture" required oninput="calculerTotal()" />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label required-field">Montant Verres (FCFA)</label>
+            <input type="number" class="payment-input" name="montant_verres" id="montant_verres" required oninput="calculerTotal()" />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label">Frais de livraison (FCFA)</label>
+            <input type="number" class="payment-input" name="frais_livraison" id="frais_livraison" value="0" oninput="calculerTotal()" />
+        </div>
+    </div>
+    
+    <div class="payment-row payment-highlight">
+        <div class="payment-group">
+            <label class="payment-label">Total Brut (FCFA)</label>
+            <input type="number" class="payment-input payment-total" name="total_brut" id="total_brut" readonly />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label">Remise</label>
+            <div class="discount-selector">
+                <input type="number" class="payment-input discount-amount" name="remise" id="remise" value="0" oninput="calculerTotal()" />
+                <select class="payment-input discount-type" name="remise_type" id="remise_type" onchange="calculerTotal()">
+                    <option value="FCFA">FCFA</option>
+                    <option value="%">%</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label">Part Assurance (FCFA)</label>
+            <input type="number" class="payment-input" name="part_assurance" id="part_assurance" value="0" oninput="calculerTotal()" />
+        </div>
+    </div>
+    
+    <div class="payment-row payment-highlight">
+        <div class="payment-group">
+            <label class="payment-label">Net à payer (FCFA)</label>
+            <input type="number" class="payment-input payment-total" name="net_a_payer" id="net_a_payer" readonly />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label">Acompte (FCFA)</label>
+            <input type="number" class="payment-input" name="acompte" id="acompte" value="0" oninput="calculerTotal()" />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label">Reste à payer (FCFA)</label>
+            <input type="number" class="payment-input payment-total" name="reste_a_payer" id="reste_a_payer" readonly />
+        </div>
+    </div>
+</div>
+
+<div class="delivery-section">
+    <h2 class="section-title">INFORMATIONS DE LIVRAISON</h2>
+    
+    <div class="payment-row">
+        <div class="payment-group">
+            <label class="payment-label required-field">Date de livraison prévue</label>
+            <input type="date" class="payment-input" name="date_livraison" id="date_livraison" required />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label required-field">Personne à contacter</label>
+            <input type="text" class="payment-input" name="contact_livraison" id="contact_livraison" required />
+        </div>
+        
+        <div class="payment-group">
+            <label class="payment-label required-field">Téléphone du contact</label>
+            <input type="tel" class="payment-input" name="telephone_contact" id="telephone_contact" required />
+        </div>
+    </div>
+    
+    <div class="payment-row">
+        <div class="payment-group" style="flex: 2;">
+            <label class="payment-label required-field">Adresse de livraison</label>
+            <textarea class="delivery-textarea" name="adresse_livraison" id="adresse_livraison" required></textarea>
+        </div>
+    </div>
+    
+    <div class="payment-row">
+        <div class="payment-group">
+            <label class="payment-label">Informations complémentaires</label>
+            <textarea class="delivery-textarea" name="infos_complementaires" id="infos_complementaires"></textarea>
+        </div>
+    </div>
+</div>
+                
+                <div class="form-actions-sticky">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <button type="button" class="btn-cancel" id="cancelButton">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageBox" class="message-box">
+        <p id="messageBoxText"></p>
+        <button class="btn-confirm" id="messageBoxConfirm">OK</button>
+        <button class="btn-cancel-modal" id="messageBoxCancel">Annuler</button>
+    </div>
+    <div id="overlay" class="overlay"></div>
+
+<script>
+// URL de votre Web App Google Apps Script
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec';
+
+// Variables globales
+let originalClientData = null;
+let currentMessageBoxCallback = null;
+
+// Fonction pour basculer entre les modes consultation/édition
+function toggleEditMode(editable) {
+    const form = document.getElementById('client-form');
+    const inputs = form.querySelectorAll('input, select, textarea');
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.querySelector('.btn-save');
+    const cancelButton = document.getElementById('cancelButton');
+    
+    if (editable) {
+        // Passer en mode édition
+        form.classList.remove('consultation-mode');
+        editButton.style.display = 'none';
+        saveButton.style.display = 'flex';
+        cancelButton.innerHTML = '<i class="fas fa-times"></i> Annuler les modifications';
+        
+        // Activer tous les champs
+        inputs.forEach(input => {
+            input.removeAttribute('readonly');
+            input.disabled = false;
+            input.style.pointerEvents = 'auto';
+        });
+    } else {
+        // Passer en mode consultation
+        form.classList.add('consultation-mode');
+        editButton.style.display = 'flex';
+        saveButton.style.display = 'none';
+        cancelButton.innerHTML = '<i class="fas fa-arrow-left"></i> Retour à la liste';
+        
+        // Désactiver tous les champs
+        inputs.forEach(input => {
+            input.setAttribute('readonly', true);
+            input.disabled = true;
+            input.style.pointerEvents = 'none';
+        });
+    }
+}
+
+// Fonction pour charger les données du client
+function loadClientData() {
+    const clientData = JSON.parse(localStorage.getItem("selectedClient"));
+    if (!clientData || !clientData.data) {
+        showMessageBox("Aucun client sélectionné", "alert", () => {
+            window.location.href = "liste.html";
+        });
+        return;
+    }
+
+    // Sauvegarder les données originales
+    originalClientData = clientData;
+    
+    // Remplir les champs du formulaire
+    document.getElementById("rowIndex").value = clientData.rowIndex;
+    document.getElementById("nom_complet").value = clientData.data[0] || '';
+    document.getElementById("numero").value = clientData.data[1] || '';
+    document.getElementById("date_naissance").value = formatDateForInput(clientData.data[2]) || '';
+    // [Remplissez tous les autres champs de la même manière...]
+    
+    // Initialiser en mode consultation
+    toggleEditMode(false);
+}
+
+// Fonction pour formater la date
+function formatDateForInput(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+}
+
+// Fonction pour afficher un message box
+function showMessageBox(message, type = 'alert', callback = null) {
+    document.getElementById("messageBoxText").textContent = message;
+    document.getElementById("messageBoxConfirm").style.display = 'inline-block';
+    document.getElementById("messageBoxCancel").style.display = (type === 'confirm') ? 'inline-block' : 'none';
+    
+    currentMessageBoxCallback = callback;
+    document.getElementById("messageBox").style.display = 'block';
+    document.getElementById("overlay").style.display = 'block';
+}
+
+// Fonction pour masquer le message box
+function hideMessageBox() {
+    document.getElementById("messageBox").style.display = 'none';
+    document.getElementById("overlay").style.display = 'none';
+    currentMessageBoxCallback = null;
+}
+
+// Fonction pour supprimer un client
+function deleteClient() {
+    const clientData = JSON.parse(localStorage.getItem("selectedClient"));
+    if (!clientData) return;
+    
+    const data = {
+        action: "delete",
+        rowIndex: clientData.rowIndex,
+        username: localStorage.getItem("utilisateur")
+    };
+    
+    showMessageBox('Suppression du client en cours...', 'alert');
+    
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            showMessageBox('Client supprimé avec succès !', 'alert', () => {
+                window.location.href = 'liste.html';
+            });
+        } else {
+            throw new Error(result.message || "Erreur lors de la suppression");
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showMessageBox(`Erreur lors de la suppression: ${error.message}`, 'alert');
+    });
+}
+
+// Fonction pour mettre à jour un client
+function updateClient(formData) {
+    showMessageBox('Mise à jour du client en cours...', 'alert');
+    
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            showMessageBox('Client mis à jour avec succès !', 'alert', () => {
+                window.location.href = 'liste.html';
+            });
+        } else {
+            throw new Error(result.message || "Erreur lors de la mise à jour");
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showMessageBox(`Erreur lors de la mise à jour: ${error.message}`, 'alert');
+    });
+}
+
+// Configuration des événements
+function setupEventListeners() {
+    // Bouton Modifier
+    document.getElementById('editButton').addEventListener('click', () => {
+        toggleEditMode(true);
+    });
+    
+    // Bouton Supprimer
+    document.getElementById('deleteButton').addEventListener('click', () => {
+        showMessageBox('Voulez-vous vraiment supprimer ce client ? Cette action est irréversible.', 'confirm', (confirm) => {
+            if (confirm) {
+                deleteClient();
+            }
+        });
+    });
+    
+    // Bouton Annuler
+    document.getElementById('cancelButton').addEventListener('click', () => {
+        const form = document.getElementById('client-form');
+        if (form.classList.contains('consultation-mode')) {
+            window.location.href = 'liste.html';
+        } else {
+            showMessageBox('Voulez-vous annuler les modifications ? Tous les changements seront perdus.', 'confirm', (confirm) => {
+                if (confirm) {
+                    loadClientData(); // Recharger les données originales
+                }
+            });
+        }
+    });
+    
+    // Soumission du formulaire
+    document.getElementById('client-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = {
+            action: "update",
+            rowIndex: form.rowIndex.value,
+            username: localStorage.getItem("utilisateur")
+        };
+        
+        // Ajouter toutes les données du formulaire
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (input.name && input.name !== 'rowIndex') {
+                formData[input.name] = input.value;
+            }
+        });
+        
+        showMessageBox('Confirmez-vous la mise à jour de ce client ?', 'confirm', (confirm) => {
+            if (confirm) {
+                updateClient(formData);
+            }
+        });
+    });
+    
+    // Gestion des boutons du message box
+    document.getElementById('messageBoxConfirm').addEventListener('click', () => {
+        if (currentMessageBoxCallback) {
+            currentMessageBoxCallback(true);
+        }
+        hideMessageBox();
+    });
+    
+    document.getElementById('messageBoxCancel').addEventListener('click', () => {
+        if (currentMessageBoxCallback) {
+            currentMessageBoxCallback(false);
+        }
+        hideMessageBox();
+    });
+}
+
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    // Vérifier l'authentification
+    const username = localStorage.getItem("utilisateur");
+    if (!username) {
+        window.location.href = "code.html";
+        return;
+    }
+    document.getElementById("username-display").textContent = username;
+
+    // Charger les données du client sélectionné
+    loadClientData();
+    
+    // Configurer les événements
+    setupEventListeners();
+});
+function calculerTotal() {
+    const monture = parseFloat(document.getElementById('montant_monture').value) || 0;
+    const verres = parseFloat(document.getElementById('montant_verres').value) || 0;
+    const livraison = parseFloat(document.getElementById('frais_livraison').value) || 0;
+    
+    // Calcul du total brut
+    const totalBrut = monture + verres + livraison;
+    document.getElementById('total_brut').value = totalBrut.toFixed(2);
+    
+    // Calcul après remise
+    const remise = parseFloat(document.getElementById('remise').value) || 0;
+    const remiseType = document.getElementById('remise_type').value;
+    let totalApresRemise = totalBrut;
+    
+    if (remiseType === '%' && remise > 0) {
+        totalApresRemise = totalBrut * (1 - remise/100);
+    } else if (remiseType === 'FCFA' && remise > 0) {
+        totalApresRemise = totalBrut - remise;
+    }
+    
+    // Part assurance
+    const partAssurance = parseFloat(document.getElementById('part_assurance').value) || 0;
+    const netAPayer = Math.max(0, totalApresRemise - partAssurance);
+    document.getElementById('net_a_payer').value = netAPayer.toFixed(2);
+    
+    // Acompte et reste
+    const acompte = parseFloat(document.getElementById('acompte').value) || 0;
+    document.getElementById('reste_a_payer').value = Math.max(0, netAPayer - acompte).toFixed(2);
+}
+</script>
+</body>
+</html>

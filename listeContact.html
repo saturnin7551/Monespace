@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigitalOpti Liste de contact</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* CSS intégré ici */
+    .logo {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      margin-left: 150px;
+      margin-top: 50px;
+      margin-right: 150px;
+    }
+
+    h2.section-title {
+      border-bottom: 2px solid #000;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #14213d;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1b263b;
+      color: white;
+      cursor: pointer; /* Curseur pour indiquer que les en-têtes sont cliquables */
+      position: relative; /* Pour les icônes de tri */
+    }
+
+    th:hover {
+      background-color: #24354c; /* Légèrement plus foncé au survol */
+    }
+
+    th.sorted-asc::after {
+      content: ' \25B2'; /* Flèche vers le haut */
+      font-size: 0.7em;
+      margin-left: 5px;
+    }
+
+    th.sorted-desc::after {
+      content: ' \25BC'; /* Flèche vers le bas */
+      font-size: 0.7em;
+      margin-left: 5px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e0e6ed; /* Effet de survol sur les lignes */
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 15px;
+      margin-right: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+    }
+
+    .form-actions-sticky {
+      position: sticky;
+      bottom: 20px;
+      z-index: 100;
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-actions-sticky button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .btn-save {
+      background-color: #277da1;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background-color: #1a5a7a;
+    }
+
+    .btn-cancel {
+      background-color: #adb5bd;
+      color: white;
+    }
+
+    .btn-cancel:hover {
+      background-color: #8a939b;
+    }
+
+    .btn-reset {
+      background-color: #f77f00;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background-color: #d56b00;
+    }
+
+    /* Styles pour la barre de recherche */
+    .search-container {
+      margin-bottom: 1rem;
+      text-align: right; /* Aligne la recherche à droite */
+    }
+
+    .search-container input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 300px;
+      font-size: 1rem;
+    }
+
+    /* Styles pour le message "Aucun client" */
+    .no-clients-message {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-size: 1.1rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      margin-top: 20px;
+    }
+
+    /* Styles pour la pagination */
+    .pagination-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 1rem;
+      padding-bottom: 20px;
+    }
+
+    .pagination-controls button {
+      background-color: #1b263b;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .pagination-controls button:hover:not(:disabled) {
+      background-color: #24354c;
+    }
+
+    .pagination-controls button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .pagination-controls span {
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* Responsive pour les tableaux sur petits écrans */
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 1rem;
+      }
+
+      .search-container input {
+        width: 100%;
+      }
+      
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+      }
+
+      .form-actions-sticky {
+        bottom: 10px;
+        padding: 10px;
+        gap: 10px;
+      }
+      
+      .form-actions-sticky button {
+        padding: 8px 15px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <header class="header">
+      <div class="header-left">
+        <div class="user-info">
+          <span id="username-display"></span>
+          <i class="fas fa-user-circle" style="font-size: 1.5rem;"></i>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <img src="logo1.png" alt="Logo" class="logo">
+      </div>
+    </header>
+    <h2 class="section-title">Liste des Clients</h2>
+
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Rechercher par nom..." />
+    </div>
+
+    <div id="loading-indicator" style="text-align: center; padding: 20px; display: none;">
+      <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #277da1;"></i>
+      <p>Chargement des clients...</p>
+    </div>
+    <div id="error-message" style="color: red; text-align: center; padding: 20px; display: none;"></div>
+
+    <table id="client-table">
+      <thead>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <div class="pagination-controls">
+      <button id="prevPage" disabled><i class="fas fa-chevron-left"></i> Précédent</button>
+      <span>Page <span id="currentPage">1</span> sur <span id="totalPages">1</span></span>
+      <button id="nextPage"><i class="fas fa-chevron-right"></i> Suivant</button>
+      <select id="itemsPerPageSelect">
+        <option value="5">5 par page</option>
+        <option value="10" selected>10 par page</option>
+        <option value="20">20 par page</option>
+        <option value="50">50 par page</option>
+      </select>
+    </div>
+
+    <form id="client-form" method="POST">
+      <div class="form-actions-sticky">
+        <button type="button" class="btn-cancel" id="cancelButton">
+          <i class="fas fa-times"></i> Retour
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    /* JavaScript intégré ici */
+
+    let allClientsData = []; // Stocke tous les clients récupérés
+    let filteredClients = []; // Stocke les clients après application du filtre de recherche
+    let currentPage = 1;
+    let itemsPerPage = 10; // Valeur par défaut
+    let currentSortColumn = null;
+    let currentSortDirection = 'asc'; // 'asc' ou 'desc'
+
+    // Fonction pour afficher le message de chargement
+    function showLoading() {
+      document.getElementById("loading-indicator").style.display = "block";
+      document.getElementById("error-message").style.display = "none";
+      document.getElementById("client-table").style.display = "none";
+      document.querySelector('.pagination-controls').style.display = 'none'; // Cacher pagination
+      const existingNoClientsMessage = document.getElementById("no-clients-message");
+      if (existingNoClientsMessage) {
+        existingNoClientsMessage.remove();
+      }
+    }
+
+    // Fonction pour cacher le message de chargement
+    function hideLoading() {
+      document.getElementById("loading-indicator").style.display = "none";
+      document.querySelector('.pagination-controls').style.display = 'flex'; // Afficher pagination (flex car c'est un flexbox)
+      // Le tableau sera affiché par renderTableRows si des données sont présentes
+    }
+
+    // Fonction pour afficher un message d'erreur
+    function displayError(message) {
+      const errorMessageElement = document.getElementById("error-message");
+      errorMessageElement.textContent = `Erreur : ${message}. Veuillez réessayer.`;
+      errorMessageElement.style.display = "block";
+      document.getElementById("client-table").style.display = "none";
+      document.querySelector('.pagination-controls').style.display = 'none'; // Cacher pagination
+      const existingNoClientsMessage = document.getElementById("no-clients-message");
+      if (existingNoClientsMessage) {
+        existingNoClientsMessage.remove();
+      }
+    }
+
+    // Fonction pour rendre les en-têtes du tableau
+    function renderTableHeaders(headers) {
+      const thead = document.querySelector("#client-table thead");
+      thead.innerHTML = ""; // Vider les anciens en-têtes
+
+      const tr = document.createElement("tr");
+      headers.forEach((header, index) => {
+        const th = document.createElement("th");
+        th.textContent = header;
+        th.setAttribute('data-column-index', index); // Stocker l'index de la colonne
+        th.addEventListener('click', () => sortTable(index)); // Gérer le tri
+
+        // Ajouter les classes de tri si la colonne est triée
+        if (currentSortColumn === index) {
+          th.classList.add(`sorted-${currentSortDirection}`);
+        }
+        tr.appendChild(th);
+      });
+      thead.appendChild(tr);
+    }
+
+    // Fonction pour rendre les lignes du tableau et attacher les gestionnaires d'événements
+    function renderTableRows(rowsToDisplay, headers) {
+      const tbody = document.querySelector("#client-table tbody");
+      tbody.innerHTML = ""; // Vider le tableau avant d'ajouter de nouvelles lignes
+
+      const tableContainer = document.getElementById("client-table").parentNode;
+      let existingNoClientsMessage = document.getElementById("no-clients-message");
+
+      if (rowsToDisplay.length === 0) {
+        if (!existingNoClientsMessage) {
+          const noClientsMessage = document.createElement("p");
+          noClientsMessage.textContent = "Aucun client trouvé pour le moment.";
+          noClientsMessage.className = "no-clients-message"; // Appliquer le style
+          noClientsMessage.id = "no-clients-message";
+          tableContainer.insertBefore(noClientsMessage, document.getElementById("client-table"));
+        }
+        document.getElementById("client-table").style.display = "none";
+        return;
+      } else {
+        if (existingNoClientsMessage) {
+          existingNoClientsMessage.remove();
+        }
+        document.getElementById("client-table").style.display = "table";
+      }
+
+      rowsToDisplay.forEach(row => {
+        const tr = document.createElement("tr");
+        row.forEach((cell, index) => {
+          const td = document.createElement("td");
+          td.setAttribute('data-label', headers[index] + ':'); // Pour responsive table
+          if (index === 0) {
+            // Première colonne cliquable (nom)
+            const link = document.createElement("a");
+            link.href = "#";
+            link.className = "client-link";
+            link.textContent = cell || "";
+            link.setAttribute("data-client", JSON.stringify(row));
+            link.addEventListener("click", function (e) {
+              e.preventDefault();
+              const clientData = JSON.parse(this.getAttribute("data-client"));
+              
+              // Stocker toutes les données du client dans localStorage
+              localStorage.setItem("selectedClient", JSON.stringify({
+                data: clientData,
+                rowIndex: allClientsData.indexOf(row) + 2 // +2 car les lignes dans Google Sheets commencent à 1 et l'en-tête est la ligne 1
+              }));
+              
+              // Rediriger vers la page de formulaire
+              window.location.href = "Modif.html"; // Remplacez par le nom de votre page de formulaire
+            });
+            td.appendChild(link);
+          } else {
+            td.textContent = cell || "";
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Fonction principale pour charger et afficher les clients
+    async function loadClientsFromScript() {
+      showLoading();
+      const url = "https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=liste";
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        
+        allClientsData = data.rows; // Stocker toutes les données brutes
+        const headers = data.headers; // Récupérer les en-têtes
+
+        renderTableHeaders(headers); // Rendre les en-têtes
+
+        // Initialiser les clients filtrés avec toutes les données
+        filteredClients = [...allClientsData]; 
+        
+        // Appliquer le filtre de recherche initial (si déjà du texte)
+        applySearchFilter(); 
+        
+        // Rendre le tableau paginé
+        updateTableAndPagination(); 
+
+      } catch (error) {
+        console.error("Erreur de chargement des données :", error);
+        displayError(error.message || "Impossible de charger les clients");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // --- Fonctionnalités de recherche ---
+    const searchInput = document.getElementById('searchInput');
+
+    function applySearchFilter() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      if (!searchTerm) {
+        filteredClients = [...allClientsData]; // Si pas de recherche, toutes les données
+      } else {
+        filteredClients = allClientsData.filter(client => {
+          // Recherche UNIQUEMENT dans la première colonne (index 0)
+          const firstColumnValue = client[0] ? String(client[0]).toLowerCase() : '';
+          return firstColumnValue.includes(searchTerm);
+        });
+      }
+      currentPage = 1; // Réinitialiser à la première page après un filtre
+      updateTableAndPagination();
+    }
+
+    // Déclencher la recherche à chaque frappe (input event)
+    searchInput.addEventListener('input', applySearchFilter);
+
+    // --- Fonctionnalités de tri ---
+    function sortTable(columnIndex) {
+      if (currentSortColumn === columnIndex) {
+        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSortColumn = columnIndex;
+        currentSortDirection = 'asc';
+      }
+
+      // Supprimer les classes de tri de tous les en-têtes
+      document.querySelectorAll('#client-table th').forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+      });
+
+      // Ajouter la classe de tri à l'en-tête actuel
+      const currentTh = document.querySelector(`#client-table th[data-column-index="${columnIndex}"]`);
+      if (currentTh) {
+        currentTh.classList.add(`sorted-${currentSortDirection}`);
+      }
+      
+      filteredClients.sort((a, b) => {
+        const valA = a[columnIndex] || '';
+        const valB = b[columnIndex] || '';
+
+        // Tenter de convertir en nombre si possible pour un tri numérique
+        const numA = parseFloat(valA);
+        const numB = parseFloat(valB);
+
+        if (!isNaN(numA) && !isNaN(numB) && typeof valA === 'string' && typeof valB === 'string' && !valA.includes(' ') && !valB.includes(' ')) {
+          return currentSortDirection === 'asc' ? numA - numB : numB - numA;
+        } else {
+          // Tri alphabétique par défaut (case-insensitive)
+          const strA = String(valA).toLowerCase();
+          const strB = String(valB).toLowerCase();
+          if (strA < strB) return currentSortDirection === 'asc' ? -1 : 1;
+          if (strA > strB) return currentSortDirection === 'asc' ? 1 : -1;
+          return 0;
+        }
+      });
+      currentPage = 1; // Retour à la première page après le tri
+      updateTableAndPagination();
+    }
+
+
+    // --- Fonctionnalités de pagination ---
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const currentPageSpan = document.getElementById('currentPage');
+    const totalPagesSpan = document.getElementById('totalPages');
+    const itemsPerPageSelect = document.getElementById('itemsPerPageSelect');
+
+    function updateTableAndPagination() {
+      const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
+      totalPagesSpan.textContent = totalPages === 0 ? 1 : totalPages;
+      currentPageSpan.textContent = currentPage;
+
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages || filteredClients.length === 0;
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const rowsToDisplay = filteredClients.slice(startIndex, endIndex);
+      
+      // Les en-têtes sont dans le premier élément de allClientsData (headers)
+      // On assume que les en-têtes ne changent pas après le premier chargement
+      const headers = document.querySelectorAll('#client-table thead th').length > 0 ? 
+                      Array.from(document.querySelectorAll('#client-table thead th')).map(th => th.textContent.replace(' ▲', '').replace(' ▼', '')) : 
+                      []; // Fallback si headers pas encore rendus
+                      
+      renderTableRows(rowsToDisplay, headers);
+    }
+
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updateTableAndPagination();
+      }
+    });
+
+    nextPageBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(filteredClients.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        updateTableAndPagination();
+      }
+    });
+
+    itemsPerPageSelect.addEventListener('change', () => {
+      itemsPerPage = parseInt(itemsPerPageSelect.value);
+      currentPage = 1; // Réinitialiser à la première page
+      updateTableAndPagination();
+    });
+
+    // --- Initialisation et événements globaux ---
+
+    // Gestion du bouton "Retour"
+    document.getElementById('cancelButton').addEventListener('click', function() {
+      setTimeout(function() {
+        window.location.href = 'Accueil.html';
+      }, 300);
+    });
+
+
+    // Charger les clients au chargement de la page
+    document.addEventListener("DOMContentLoaded", loadClientsFromScript);
+  </script>
+</body>
+</html>

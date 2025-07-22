@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DigitalOpti Nouvelle Vente</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    .logo {
+      height: 40px;
+      object-fit: contain;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f6f8;
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      margin-left: 150px; /* Pour compenser la largeur de la sidebar */
+      margin-top: 50px; /* Ajoutez cette ligne pour l'espace en haut */
+      margin-right: 150px;
+    }
+
+    h2.section-title {
+      border-bottom: 2px solid #000;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #14213d;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .form-actions button {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-save {
+      background-color: #277da1;
+      color: white;
+    }
+
+    .btn-save:hover {
+      background-color: #1a5a7a;
+    }
+
+    .btn-cancel {
+      background-color: #adb5bd;
+      color: white;
+    }
+
+    .btn-cancel:hover {
+      background-color: #8a939b;
+    }
+
+    .btn-reset {
+      background-color: #f77f00;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background-color: #d56b00;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+    
+    th, td {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #1b263b;
+      color: white;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 15px;
+      margin-right: 15px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    
+    .required-field::after {
+      content: " *";
+      color: red;
+    }
+
+    .payment-section {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .payment-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .payment-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .payment-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #495057;
+    }
+    
+    .payment-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .payment-input:focus {
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    }
+    
+    .payment-input[readonly] {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+    }
+    
+    .payment-total {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .payment-highlight {
+      background-color: #e8f4fd;
+      padding: 10px;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+    }
+    
+    .discount-selector {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .discount-amount {
+      flex: 1;
+    }
+    
+    .discount-type {
+      width: 80px;
+    }
+    
+    .form-actions-sticky {
+      position: sticky;
+      bottom: 20px;
+      z-index: 100;
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-actions-sticky button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .form-actions-sticky {
+        bottom: 10px;
+        padding: 10px;
+        gap: 10px;
+      }
+      
+      .form-actions-sticky button {
+        padding: 8px 15px;
+        font-size: 13px;
+      }
+    }
+  </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js">
+  </script>
+</head>
+<body>
+  <div class="content">
+    <header class="header">
+            <h1> Facture Proforma</h1>
+        </header>
+    
+    <form id="client-form" method="POST">
+      <h2 class="section-title">INFORMATION CLIEN</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nom_complet" class="required-field">Nom complet du client</label>
+          <input type="text" name="nom_complet" id="nom_complet" required />
+        </div>
+
+        <div class="form-group">
+          <label class="required-field">Contact</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" name="indicatif" placeholder="+229" style="width: 70px;" required />
+            <input type="tel" name="numero" placeholder="12345678" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="date_naissance" class="required-field">Né le</label>
+          <input type="date" name="date_naissance" id="date_naissance" required />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="entreprise">Entreprise</label>
+          <select name="entreprise" id="entreprise">
+            <option value="">-- Entreprise --</option>
+            <option value="CEI">CEI</option>
+            <option value="SONEB">SONEB</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="civilite" class="required-field">Civilité</label>
+          <select name="civilite" id="civilite" required>
+            <option value="">-- Civilité --</option>
+            <option value="Enfant">Enfant</option>
+            <option value="M.">M.</option>
+            <option value="Mme">Mme</option>
+            <option value="Mlle">Mlle</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="agence" class="required-field">Agence</label>
+          <select name="agence" id="agence" required>
+            <option value="">-- Agence --</option>
+            <option value="cotonou">Cotonou</option>
+            <option value="calavi">Calavi</option>
+          </select>
+        </div>
+      </div>
+      
+      <h2 class="section-title">PRESCRIPTION ET COMMANDE</h2>
+        <div class="form-row">
+        <div class="form-group">
+          <label for="type_verre" class="required-field">Type de Verre</label>
+          <select name="type_verre" id="type_verre" required>
+            <option value="">-- Type de Verre --</option>
+            <option value="photo ar">Photo AR</option>
+            <option value="photo max">Photo Max</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="gamme_verre" class="required-field">Gamme des Verres</label>
+          <select name="gamme_verre" id="gamme_verre" required>
+            <option value="">-- Gamme --</option>
+            <option value="GA">Ga</option>
+            <option value="GB">Gb</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="choix_monture" class="required-field">Choix de Monture</label>
+          <select name="choix_monture" id="choix_monture" required>
+            <option value="">-- Choix de Monture --</option>
+            <option value="plastique">Plastique</option>
+            <option value="métal">Métal</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Œil</th>
+              <th>Sphere</th>
+              <th>Cylindre</th>
+              <th>Axe</th>
+              <th>ADD</th>
+              <th>DP</th>
+              <th>Hauteur</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>OD</td>
+              <td>
+                <select name="od_sphere" required style="width: 100%;">
+                  <option value="">0</option>
+                  <option>0.00</option>
+                  <option>+0.25</option>
+                </select>
+              </td>
+              <td>
+                <select name="od_cylindre" style="width: 100%;">
+                  <option>0.00</option>
+                </select>
+              </td>
+              <td>
+                <select name="od_axe" style="width: 100%;">
+                  <option>0°</option>
+                  <option>5°</option>
+                </select>
+              </td>
+              <td>
+                <select name="od_add" style="width: 100%;">
+                  <option value="">0.00</option>
+                  <option>0.00</option>
+                </select>
+              </td>
+              <td>
+                <select name="od_dp" style="width: 100%;">
+                  <option value="">0</option>
+                  <option>28</option>
+                </select>
+              </td>
+              <td>
+                <select name="od_hauteur" style="width: 100%;">
+                  <option value="">0</option>
+                  <option>15</option>
+                </select>
+              </td>
+            </tr>
+
+            <tr>
+              <td>OG</td>
+              <td>
+                <select name="og_sphere" required style="width: 100%;">
+                  <option value="">0.00</option>
+                  <option>0.00</option>
+                  <option>+0.25</option>
+                </select>
+              </td>
+              <td>
+                <select name="og_cylindre" style="width: 100%;">
+                  <option value="">0.00</option>
+                  <option>0.00</option>
+                  <option>+0.25</option>
+                </select>
+              </td>
+              <td>
+                <select name="og_axe" style="width: 100%;">
+                  <option value="">0</option>
+                  <option>0°</option>
+                  <option>5°</option>
+                </select>
+              </td>
+              <td>
+                <select name="og_add" style="width: 100%;">
+                  <option value="">0</option>
+                </select>
+              </td>
+              <td>
+                <select name="og_dp" style="width: 100%;">
+                  <option value="">0</option>
+                  <option>28</option>
+                </select>
+              </td>
+              <td>
+                <select name="og_hauteur" style="width: 100%;">
+                  <option value="">0</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="form-row" style="margin-top: 1.5rem;">
+        <div class="form-group">
+          <label for="clinique">Clinique</label>
+          <select name="clinique" id="clinique">
+            <option value="">-- Choisir --</option>
+            <option value="clinique A">Clinique A</option>
+            <option value="clinique B">Clinique B</option>
+          </select>
+        </div>
+      
+        <div class="form-group">
+          <label for="ophtalmo">Ophtalmo</label>
+          <select name="ophtalmo" id="ophtalmo">
+            <option value="">-- Choisir --</option>
+            <option value="Dr A">Dr A</option>
+            <option value="Dr B">Dr B</option>
+          </select>
+        </div>
+      
+        <div class="form-group">
+          <label for="date_soin">Date de soin</label>
+          <input type="date" name="date_soin" id="date_soin" />
+        </div>
+      </div>
+
+      <div class="payment-section">
+        <div class="payment-row">
+          <div class="payment-group">
+            <label class="payment-label required-field">Montant Monture (FCFA)</label>
+            <input type="number" class="payment-input" name="montant_monture" id="montant_monture" required oninput="calculerTotal()" />
+          </div>
+          
+          <div class="payment-group">
+            <label class="payment-label required-field">Montant Verres (FCFA)</label>
+            <input type="number" class="payment-input" name="montant_verres" id="montant_verres" required oninput="calculerTotal()" />
+          </div>
+        </div>
+        
+        <div class="payment-row payment-highlight">
+          <div class="payment-group">
+            <label class="payment-label">Total Brut (FCFA)</label>
+            <input type="number" class="payment-input payment-total" name="total_brut" id="total_brut" readonly />
+          </div>
+          
+          <div class="payment-group">
+            <label class="payment-label">Remise</label>
+            <div class="discount-selector">
+              <input type="number" class="payment-input discount-amount" name="remise" id="remise" value="0" oninput="calculerTotal()" />
+              <select class="payment-input discount-type" name="remise_type" id="remise_type" onchange="calculerTotal()">
+                <option value="FCFA">FCFA</option>
+                <option value="%">%</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="payment-row payment-highlight">
+          <div class="payment-group">
+            <label class="payment-label">Net à payer (FCFA)</label>
+            <input type="number" class="payment-input payment-total" name="net_a_payer" id="net_a_payer" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions-sticky">
+        <button type="submit" class="btn-save">
+          <i class="fas fa-save"></i> Imprimer
+        </button>
+        <button type="button" class="btn-cancel" id="cancelButton">
+          <i class="fas fa-times"></i> Annuler
+        </button>
+        <button type="reset" class="btn-reset" id="resetButton">
+          <i class="fas fa-undo"></i> Réinitialiser
+        </button>
+      </div>
+    </form>
+  </div>
+  <script>
+    function calculerTotal() {
+      const montantMonture = parseFloat(document.getElementById('montant_monture').value) || 0;
+      const montantVerres = parseFloat(document.getElementById('montant_verres').value) || 0;
+      const remise = parseFloat(document.getElementById('remise').value) || 0;
+      const remiseType = document.getElementById('remise_type').value;
+      
+      const totalBrut = montantMonture + montantVerres;
+      document.getElementById('total_brut').value = totalBrut.toFixed(2);
+      
+      let montantRemise = 0;
+      if (remiseType === '%') {
+        montantRemise = totalBrut * (remise / 100);
+      } else {
+        montantRemise = remise;
+      }
+      
+      const netAPayer = totalBrut - montantRemise;
+      document.getElementById('net_a_payer').value = Math.max(0, netAPayer).toFixed(2);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      calculerTotal();
+      
+      document.getElementById('cancelButton').addEventListener('click', function() {
+        document.querySelector('form').reset();
+        setTimeout(function() {
+          window.location.href = 'Accueil.html';
+        }, 300);
+      });
+      
+      document.getElementById('resetButton').addEventListener('click', function() {
+        setTimeout(function() {
+          document.getElementById('nom_complet').focus();
+        }, 100);
+      });
+    });
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const formData = {
+    nom_complet: document.getElementById('nom_complet').value,
+    contact: document.querySelector('input[name="indicatif"]').value + ' ' + document.querySelector('input[name="numero"]').value,
+    date_naissance: document.getElementById('date_naissance').value,
+    entreprise: document.getElementById('entreprise').value,
+    civilite: document.getElementById('civilite').value,
+    agence: document.getElementById('agence').value,
+    type_verre: document.getElementById('type_verre').value,
+    gamme_verre: document.getElementById('gamme_verre').value,
+    choix_monture: document.getElementById('choix_monture').value,
+    od_sphere: document.querySelector('select[name="od_sphere"]').value,
+    od_cylindre: document.querySelector('select[name="od_cylindre"]').value,
+    od_axe: document.querySelector('select[name="od_axe"]').value,
+    od_add: document.querySelector('select[name="od_add"]').value,
+    od_dp: document.querySelector('select[name="od_dp"]').value,
+    od_hauteur: document.querySelector('select[name="od_hauteur"]').value,
+    og_sphere: document.querySelector('select[name="og_sphere"]').value,
+    og_cylindre: document.querySelector('select[name="og_cylindre"]').value,
+    og_axe: document.querySelector('select[name="og_axe"]').value,
+    og_add: document.querySelector('select[name="og_add"]').value,
+    og_dp: document.querySelector('select[name="og_dp"]').value,
+    og_hauteur: document.querySelector('select[name="og_hauteur"]').value,
+    clinique: document.getElementById('clinique').value,
+    ophtalmo: document.getElementById('ophtalmo').value,
+    date_soin: document.getElementById('date_soin').value,
+    montant_monture: document.getElementById('montant_monture').value,
+    montant_verres: document.getElementById('montant_verres').value,
+    total_brut: document.getElementById('total_brut').value,
+    remise: document.getElementById('remise').value + ' ' + document.getElementById('remise_type').value,
+    net_a_payer: document.getElementById('net_a_payer').value
+  };
+
+  // ================= EN-TÊTE ==================
+  pdf.setFontSize(10);
+  pdf.setTextColor(33, 33, 33);
+
+  pdf.text('Digital Optic Sarl', 20, 20);
+  pdf.text('Tel: +221 77 455 12 21', 20, 25);
+  pdf.text('info@optic.com', 20, 30);
+  pdf.text('Jet d\'eau - Dakar', 20, 35);
+
+  pdf.setFontSize(12);
+  pdf.setTextColor(0, 0, 0);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('[LOGO]', 180, 20, { align: 'right' });
+
+  pdf.setDrawColor(120);
+  pdf.line(20, 42, 190, 42);
+
+  // ============== INFORMATIONS CLIENT ==============
+  let y = 50;
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(12);
+  pdf.setTextColor(30, 30, 120);
+  pdf.text('Facture Proforma', 60, y);
+  pdf.text('Facture pour	', 20, y);
+
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(10);
+  pdf.setTextColor(33, 33, 33);
+
+  y += 6;
+  const infoClient = [
+    ` ${formData.civilite} ${formData.nom_complet}`,
+    `Tel        : ${formData.contact}`,
+    `Né le      : ${formData.date_naissance}`,
+    `Entreprise : ${formData.entreprise}`,
+    `Agence     : ${formData.agence}`
+  ];
+  infoClient.forEach(line => {
+    pdf.text(line, 20, y);
+    y += 5;
+  });
+
+  // ============== COMMANDE / CONSULTATION ==============
+  y += 5;
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(11);
+  pdf.setTextColor(27, 38, 59);
+  pdf.text('DÉTAILS DE LA COMMANDE ET CONSULTATION', 20, y);
+
+  y += 4;
+  pdf.autoTable({
+    startY: y + 2,
+    body: [
+      ['Type de verre:', formData.type_verre, 'Gamme:', formData.gamme_verre],
+      ['Monture:', formData.choix_monture, 'Clinique:', formData.clinique],
+      ['Ophtalmologue:', formData.ophtalmo, 'Date de soin:', formData.date_soin]
+    ],
+    styles: { fontSize: 9, cellPadding: 3 },
+    columnStyles: {
+      0: { cellWidth: 35, fontStyle: 'bold' },
+      1: { cellWidth: 45 },
+      2: { cellWidth: 35, fontStyle: 'bold' },
+      3: { cellWidth: 45 }
+    },
+    margin: { left: 20 },
+    tableWidth: 'wrap',
+    showHead: false
+  });
+
+  y = pdf.autoTable.previous.finalY + 10;
+
+  // ============== PRESCRIPTION ==============
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(11);
+  pdf.setTextColor(27, 38, 59);
+  pdf.text('PRESCRIPTION VERRES', 20, y);
+
+  y += 3;
+  pdf.autoTable({
+    startY: y + 2,
+    head: [['Œil', 'Sph', 'Cyl', 'Axe', 'Add', 'DP', 'Hauteur']],
+    body: [
+      ['OD', formData.od_sphere, formData.od_cylindre, formData.od_axe, formData.od_add, formData.od_dp, formData.od_hauteur],
+      ['OG', formData.og_sphere, formData.og_cylindre, formData.og_axe, formData.og_add, formData.og_dp, formData.og_hauteur]
+    ],
+    headStyles: {
+      fillColor: [27, 38, 59],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    styles: { fontSize: 9 },
+    margin: { left: 20 },
+    tableWidth: 'auto'
+  });
+
+  y = pdf.autoTable.previous.finalY + 10;
+
+  // ============== PAIEMENT ==============
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(11);
+  pdf.setTextColor(27, 38, 59);
+  pdf.text('DÉTAILS DE PAIEMENT', 20, y);
+
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(10);
+  pdf.setTextColor(0, 0, 0);
+
+  const paiement = [
+    [`Montant Monture`, `${formData.montant_monture} FCFA`],
+    [`Montant Verres`, `${formData.montant_verres} FCFA`],
+    [`Total Brut`, `${formData.total_brut} FCFA`],
+    [`Remise`, `${formData.remise}`],
+    [`Net à Payer`, `${formData.net_a_payer} FCFA`]
+  ];
+
+  y += 2;
+  pdf.autoTable({
+    startY: y,
+    body: paiement,
+    styles: { fontSize: 10 },
+    columnStyles: {
+      0: { fontStyle: 'bold', cellWidth: 50 },
+      1: { cellWidth: 50, halign: 'right' }
+    },
+    theme: 'grid',
+    margin: { left: 60 },
+    tableWidth: 'wrap',
+    showHead: false
+  });
+
+  y = pdf.autoTable.previous.finalY + 10;
+
+  // Total en mots (encadré centré)
+function numberToFrenchWords(n) {
+  const ones = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"];
+  const teens = ["dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
+  const tens = ["", "", "vingt", "trente", "quarante", "cinquante", "soixante", "soixante", "quatre-vingt", "quatre-vingt"];
+
+  if (n === 0) return "zéro";
+  if (n > 999999) return "Montant trop élevé";
+
+  function convert_hundreds(n) {
+    let word = "";
+    if (n > 99) {
+      word += ones[Math.floor(n / 100)] + " cent";
+      if (n % 100 === 0 && n >= 200) word += "s";
+      n %= 100;
+      if (n > 0) word += " ";
+    }
+
+    if (n >= 20) {
+      let t = Math.floor(n / 10), u = n % 10;
+      word += tens[t];
+      if (t === 7 || t === 9) {
+        if (u === 1) word += "-et-";
+        word += teens[u];
+      } else if (u === 1 && t !== 8) {
+        word += "-et-un";
+      } else if (u > 0) {
+        word += "-" + ones[u];
+      }
+    } else if (n >= 10) {
+      word += teens[n - 10];
+    } else if (n > 0) {
+      word += ones[n];
+    }
+
+    return word;
+  }
+
+  const thousands = Math.floor(n / 1000);
+  const hundreds = n % 1000;
+  let words = "";
+
+  if (thousands > 0) {
+    if (thousands === 1) {
+      words += "mille";
+    } else {
+      words += convert_hundreds(thousands) + " mille";
+    }
+  }
+
+  if (hundreds > 0) {
+    if (thousands > 0) words += " ";
+    words += convert_hundreds(hundreds);
+  }
+
+  return words.trim();
+}
+const netPayerNumber = parseInt(formData.net_a_payer.replace(/\s/g, ''));
+const montantLettre = numberToFrenchWords(netPayerNumber).toUpperCase();
+pdf.text(`ARRÊTÉE LA PRÉSENTE FACTURE PROFORMA À LA SOMME DE ${montantLettre} FRANCS CFA`, 105, y, { align: 'center' });
+y += 6;
+  // ============== PIED DE PAGE ==============
+  y = Math.min(pdf.autoTable.previous?.finalY + 20 || 250, 250);
+  pdf.setDrawColor(180);
+  pdf.line(60, y, 150, y);
+  pdf.setFontSize(10);
+  pdf.setTextColor(70);
+
+  y += 10;
+  pdf.text('Prenez soin de vos yeux !', 105, y, { align: 'center' });
+  y += 5;
+  pdf.text('Une visite régulière chez votre opticien est essentielle pour votre santé visuelle.', 105, y, { align: 'center' });
+
+  y += 10;
+  pdf.line(60, y, 150, y);
+
+  y += 10;
+  pdf.text('Des questions ? Contactez-nous : +221 77 183 73 33', 105, y, { align: 'center' });
+
+  // Sauvegarde
+  const fileName = `Facture_${formData.nom_complet.replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+  pdf.save(fileName);
+}
+
+document.getElementById('client-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  generatePDF();
+});
+
+  </script>
+</body>
+</html>
