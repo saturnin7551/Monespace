@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Client - DigitalOpti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+  /* General debut */
+    :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-accent: #4cc9f0;
+            --success-color: #4ade80;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #94a3b8;
+            --sidebar-bg: #1e293b;
+            --sidebar-text: #e2e8f0;
+            --sidebar-hover: #334155;
+            --sidebar-active: #4361ee;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+              
+        /* Dashboard Content */
+        .dashboard-section {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.75rem;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .dashboard-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+        .profile-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .profile-name {
+            font-weight: 500;
+        }
+
+        .profile-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--card-bg);
+            min-width: 200px;
+            box-shadow: var(--card-shadow);
+            border-radius: var(--border-radius);
+            z-index: 10;
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-menu a {
+            color: var(--dark-color);
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+        }
+
+        .dropdown-menu a i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .profile-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+
+  /* General fin */
+        
+        .client-detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0;
+        }
+
+        .client-header {
+            background-color: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .client-name {
+            font-size: 1.8rem;
+            margin: 0;
+            color: var(--dark-color);
+        }
+
+        .client-id {
+            color: var(--gray-color);
+            font-size: 1rem;
+        }
+
+        .client-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-active {
+            background-color: rgba(74, 222, 128, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .detail-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray-color);
+            transition: var(--transition);
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            background-color: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-right: 0.75rem;
+            color: var(--accent-color);
+        }
+
+        .detail-item {
+            margin-bottom: 1rem;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            color: var(--dark-color);
+            word-break: break-word;
+            padding: 0.5rem 0;
+        }
+
+        .medical-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .eye-section {
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+        }
+
+        .eye-title {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .payment-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .payment-card {
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .payment-label {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        .payment-amount {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f8fafc;
+        }
+
+        .client-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .client-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .medical-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+        .btn-status {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    width: 400px;
+    max-width: 90%;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+        /* Style du conteneur modal */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.dialog-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Carte de dialogue */
+.dialog-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 450px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.dialog-overlay.active .dialog-card {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* En-tête */
+.dialog-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dialog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.dialog-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s;
+}
+
+.dialog-close:hover {
+    color: #333;
+}
+
+/* Corps de la boîte */
+.dialog-body {
+    padding: 1.5rem;
+}
+
+/* Formulaire */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+/* Pied de page */
+.dialog-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+/* Styles pour la nouvelle section */
+.history-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.history-section {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.history-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 1rem;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    text-align: left;
+    position: sticky;
+    top: 0;
+}
+
+.history-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+        
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+
+        <div class="main">
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Mon Espace</h1>
+                </div>
+                
+                <div class="user-info">
+                    
+                    <div class="profile-dropdown">
+                        <span class="profile-name" id="username-display"></span>
+                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=4361ee&color=fff" alt="Profile" class="profile-img">
+                        <div class="dropdown-menu">
+                            <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+<script>
+        // Vérification de la connexion et affichage du nom d'utilisateur
+    document.addEventListener('DOMContentLoaded', function() {
+        // Récupère le nom d'utilisateur depuis sessionStorage
+        const username = sessionStorage.getItem("utilisateur") || localStorage.getItem("utilisateur");
+
+        if (username) {
+            // Affiche le nom d'utilisateur
+            document.getElementById("username-display").textContent = username;
+
+            // Met à jour l'image de profil avec les initiales
+            const profileImg = document.querySelector('.profile-img');
+            if (profileImg) {
+                profileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=4361ee&color=fff`;
+            }
+        } else {
+            // Redirige vers la page de connexion si aucun utilisateur n'est connecté
+            window.location.href = "code.html";
+        }
+
+        // Gestion de la déconnexion
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionStorage.removeItem("utilisateur");
+            localStorage.removeItem("utilisateur");
+            window.location.href = 'code.html';
+        });
+    });
+   </script>
+         <section class="dashboard-section">
+
+                <div class="client-detail-container">
+                    <div class="dashboard-header">
+                        <h1>Détails Client</h1>
+                        <div class="dashboard-buttons">
+                            <button class="btn btn-secondary" onclick="showComplementDialog()">
+                                <i class="fas fa-plus-circle"></i> Ajouter un complément
+                            </button>
+                            <select class="btn btn-status" id="status-select" onchange="updateDealStatus()">
+                                <option value="">Changer l'étape du Deals</option>
+                                <option value="Lunette Disponible">Lunette Disponible</option>
+                                <option value="Livré">Livré</option>
+                                <option value="Perdu">Perdu</option>
+                                <option value="Cancel">Cancel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="client-header">
+                        <div>
+                            <h1 class="client-name" id="client-name"></h1>
+                            <div class="client-id">ID: <span id="client-id"></span></div>
+                        </div>
+                        <span class="client-status" id="client-status"></span>
+                    </div>
+
+                    <div class="detail-tabs">
+                        <button class="tab-button active" data-tab="info">Informations</button>
+                        <button class="tab-button" data-tab="medical">Détails Médicaux</button>
+                        <button class="tab-button" data-tab="order">Commande</button>
+                        <button class="tab-button" data-tab="insurance">Tier Payant</button>
+                        <button class="tab-button" data-tab="payment">Paiement</button>
+                    <button class="tab-button" data-tab="history">Historique du Deal</button>
+                    </div>
+
+                    <div id="info-tab" class="tab-content active">
+                        <div class="detail-grid">
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-user"></i> Contact</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Nom Complet</span>
+                                    <p class="detail-value" id="client-fullname"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Numéro de Contact</span>
+                                    <p class="detail-value" id="client-phone"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Date de Naissance</span>
+                                    <p class="detail-value" id="client-birthdate"></p>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-building"></i> Entreprise</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Entreprise</span>
+                                    <p class="detail-value" id="client-company"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Civilité</span>
+                                    <p class="detail-value" id="client-civility"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="medical-tab" class="tab-content">
+                        <div class="medical-grid">
+                            <div class="eye-section">
+                                <h4 class="eye-title">Œil Droit (OD)</h4>
+                                <div class="detail-item">
+                                    <span class="detail-label">Sphere</span>
+                                    <p class="detail-value" id="od-sphere"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cylindre</span>
+                                    <p class="detail-value" id="od-cylinder"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Axe</span>
+                                    <p class="detail-value" id="od-axis"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">ADD</span>
+                                    <p class="detail-value" id="od-add"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">DP</span>
+                                    <p class="detail-value" id="od-dp"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Hauteur</span>
+                                    <p class="detail-value" id="od-height"></p>
+                                </div>
+                            </div>
+
+                            <div class="eye-section">
+                                <h4 class="eye-title">Œil Gauche (OG)</h4>
+                                <div class="detail-item">
+                                    <span class="detail-label">Sphere</span>
+                                    <p class="detail-value" id="og-sphere"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Cylindre</span>
+                                    <p class="detail-value" id="og-cylinder"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Axe</span>
+                                    <p class="detail-value" id="og-axis"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">ADD</span>
+                                    <p class="detail-value" id="og-add"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">DP</span>
+                                    <p class="detail-value" id="og-dp"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Hauteur</span>
+                                    <p class="detail-value" id="og-height"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3 class="section-title"><i class="fas fa-hospital"></i> Informations Médicales</h3>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Clinique</span>
+                                    <p class="detail-value" id="clinic"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Ophtalmologue</span>
+                                    <p class="detail-value" id="ophthalmologist"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Date de Soin</span>
+                                    <p class="detail-value" id="care-date"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="order-tab" class="tab-content">
+                        <div class="detail-grid">
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-glasses"></i> Verres</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Type de Verre</span>
+                                    <p class="detail-value" id="lens-type"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Gamme des Verres</span>
+                                    <p class="detail-value" id="lens-range"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Montant Verres</span>
+                                    <p class="detail-value" id="lens-amount"></p>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-eye"></i> Monture</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Choix de Monture</span>
+                                    <p class="detail-value" id="frame-choice"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Montant Monture</span>
+                                    <p class="detail-value" id="frame-amount"></p>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-store"></i> Vente</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Agence</span>
+                                    <p class="detail-value" id="agency"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Commercial</span>
+                                    <p class="detail-value" id="salesperson"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="insurance-tab" class="tab-content">
+                        <div class="detail-grid">
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-shield-alt"></i> Assurance</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Assurance</span>
+                                    <p class="detail-value" id="insurance"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Compagnie</span>
+                                    <p class="detail-value" id="insurance-company"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Numéro Police</span>
+                                    <p class="detail-value" id="policy-number"></p>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <h3 class="section-title"><i class="fas fa-percentage"></i> Couverture</h3>
+                                <div class="detail-item">
+                                    <span class="detail-label">Taux Couverture</span>
+                                    <p class="detail-value" id="coverage-rate"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Nom Assuré Principal</span>
+                                    <p class="detail-value" id="insured-name"></p>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Part Assurance</span>
+                                    <p class="detail-value" id="insurance-part"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="payment-tab" class="tab-content">
+                        <div class="payment-summary">
+                            <div class="payment-card">
+                                <div class="payment-label">Net à Payer</div>
+                                <div class="payment-amount" id="net-amount"></div>
+                            </div>
+                            <div class="payment-card">
+                                <div class="payment-label">Acompte</div>
+                                <div class="payment-amount" id="deposit-amount"></div>
+                                <div class="detail-value" id="deposit-date"></div>
+                            </div>
+                            <div class="payment-card">
+                                <div class="payment-label">Complément 1</div>
+                                <div class="payment-amount" id="complement1-amount"></div>
+                                <div class="detail-value" id="complement1-date"></div>
+                            </div>
+                            <div class="payment-card">
+                                <div class="payment-label">Complément 2</div>
+                                <div class="payment-amount" id="complement2-amount"></div>
+                                <div class="detail-value" id="complement2-date"></div>
+                            </div>
+                            <div class="payment-card">
+                                <div class="payment-label">Reste à Payer</div>
+                                <div class="payment-amount" id="remaining-amount"></div>
+                            </div>
+                        </div>
+
+                        <div class="detail-item" style="margin-top: 1.5rem;">
+                            <span class="detail-label">Statut</span>
+                            <p class="detail-value" id="payment-status"></p>
+                        </div>
+                    </div>
+<!-- Ajoutez ceci juste avant la div client-actions -->
+<div id="history-tab" class="tab-content">
+    <div class="history-grid">
+        <!-- Histoire des paiements -->
+        <div class="history-section">
+            <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> Historique des Paiements</h3>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                                <th>ID</th>
+                                <th>Montant</th>
+                                <th>Catégorie</th>
+                                <th>Agence</th>
+                                <th>Utilisateur</th>
+                                <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-history">
+                        <!-- Les données seront injectées ici par JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Histoire des changements -->
+        <div class="history-section">
+            <h3 class="section-title"><i class="fas fa-exchange-alt"></i> Historique des Changements</h3>
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Ancien Statut</th>
+                            <th>Nouveau Statut</th>
+                            <th>Date</th>
+                            <th>Utilisateur</th>
+                        </tr>
+                    </thead>
+                    <tbody id="status-history">
+                        <!-- Les données seront injectées ici par JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+                    <div class="client-actions">
+                        <button class="btn btn-primary" onclick="openVueGlobale()">
+                            <i class="fas fa-edit"></i> Retour
+                        </button>
+                        <button class="btn btn-secondary" onclick="printClientDetails()">
+                            <i class="fas fa-print"></i> Imprimer
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+<div id="modal-container"></div>
+    <script>
+        // Fonction pour ouvrir Acceuil
+        window.openVueGlobale = function() {
+            try {
+                const salePath = 'Accueil.html';
+                window.location.href = salePath;
+            } catch (error) {
+                console.error("Erreur d'ouverture:", error);
+                alert("Impossible d'ouvrir la page. Contactez l'administrateur.");
+            }
+        };
+document.addEventListener('DOMContentLoaded', function() {
+    // Activer les onglets
+    setupTabs();
+    
+    // Ancien code commenté:
+    const urlParams = new URLSearchParams(window.location.search);
+    const clientId = urlParams.get('id') || JSON.parse(localStorage.getItem("selectedClient"))[0];
+loadClientData(clientId);
+});
+
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Désactiver tous les onglets
+                    document.querySelectorAll('.tab-button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Activer l'onglet sélectionné
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+async function loadClientData(clientId) {
+    try {
+        console.log("Tentative de chargement des données pour l'ID:", clientId);
+        document.getElementById('client-name').textContent = "Chargement...";
+        
+        const apiUrl = `https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=getClientDetails&clientId=${encodeURIComponent(clientId)}`;
+        console.log("URL de l'API:", apiUrl);
+        
+        const response = await fetch(apiUrl);
+        console.log("Réponse reçue, statut:", response.status);
+        
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log("Données brutes reçues:", result);
+        
+        if (!result.success) {
+            throw new Error(result.message || "Erreur inconnue du serveur");
+        }
+        
+        console.log("Données client:", result.data);
+        displayClientData(result.data);
+        
+    } catch (error) {
+        console.error("Erreur complète:", error);
+        alert("Erreur lors du chargement des données du client: " + error.message);
+    }
+}
+
+async function displayClientData(data) {
+    console.log("Structure complète des données:", data);
+    
+    // Informations de base
+    document.getElementById('client-id').textContent = data["ID client"] || '';
+    document.getElementById('client-name').textContent = data["Nom Complet Client"] || 'Nom non renseigné';
+    document.getElementById('client-fullname').textContent = data["Nom Complet Client"] || '';
+    document.getElementById('client-phone').textContent = data["Numéro Contact"] || 'N/A';
+    document.getElementById('client-birthdate').textContent = formatDate(data["Date Naissance"]) || '';
+    document.getElementById('client-company').textContent = data.Entreprise || '';
+    document.getElementById('client-civility').textContent = data.Civilité || '';
+    
+    // Détails médicaux - OD
+    document.getElementById('od-sphere').textContent = data["OD Sphere"] || '';
+    document.getElementById('od-cylinder').textContent = data["OD Cylindre"] || '';
+    document.getElementById('od-axis').textContent = data["OD Axe"] || '';
+    document.getElementById('od-add').textContent = data["OD ADD"] || '';
+    document.getElementById('od-dp').textContent = data["OD DP"] || '';
+    document.getElementById('od-height').textContent = data["OD Hauteur"] || '';
+    
+    // Détails médicaux - OG
+    document.getElementById('og-sphere').textContent = data["OG Sphere"] || '';
+    document.getElementById('og-cylinder').textContent = data["OG Cylindre"] || '';
+    document.getElementById('og-axis').textContent = data["OG Axe"] || '';
+    document.getElementById('og-add').textContent = data["OG ADD"] || '';
+    document.getElementById('og-dp').textContent = data["OG DP"] || '';
+    document.getElementById('og-height').textContent = data["OG Hauteur"] || '';
+    
+    // Informations médicales
+    document.getElementById('clinic').textContent = data.Clinique || '';
+    document.getElementById('ophthalmologist').textContent = data.Ophtalmo || '';
+    document.getElementById('care-date').textContent = formatDate(data["Date de Soin"]) || '';
+    
+    // Commande
+    document.getElementById('lens-type').textContent = data["Type de Verre"] || '';
+    document.getElementById('lens-range').textContent = data["Gamme des Verres"] || '';
+    document.getElementById('frame-choice').textContent = data["Choix de Monture"] || '';
+    document.getElementById('frame-amount').textContent = data["Montant Monture (FCFA)"] ? `${data["Montant Monture (FCFA)"]} FCFA` : '';
+    document.getElementById('lens-amount').textContent = data["Montant Verres (FCFA)"] ? `${data["Montant Verres (FCFA)"]} FCFA` : '';
+    document.getElementById('agency').textContent = data.Agence || '';
+    document.getElementById('salesperson').textContent = data.Commercial || '';
+    
+    // Tier Payant
+    document.getElementById('insurance').textContent = data.Assurance || '';
+    document.getElementById('insurance-company').textContent = data["Compagnie Assurance"] || '';
+    document.getElementById('policy-number').textContent = data["Numéro Police"] || '';
+    document.getElementById('coverage-rate').textContent = data["Taux Couverture (%)"] ? `${data["Taux Couverture (%)"]}%` : '';
+    document.getElementById('insured-name').textContent = data["Nom Assureé principal"] || '';
+    document.getElementById('insurance-part').textContent = data["Part Assurance (FCFA)"] ? `${data["Part Assurance (FCFA)"]} FCFA` : '';
+    
+    // Paiement
+    document.getElementById('net-amount').textContent = data["Net à Payer (FCFA)"] ? `${data["Net à Payer (FCFA)"]} FCFA` : '';
+    document.getElementById('deposit-amount').textContent = data["Acompte (FCFA)"] ? `${data["Acompte (FCFA)"]} FCFA` : '';
+    document.getElementById('deposit-date').textContent = formatDate(data["Date Enregistrement"]) || '';
+    document.getElementById('complement1-amount').textContent = data["Complement 1"] ? `${data["Complement 1"]} FCFA` : '';
+    document.getElementById('complement1-date').textContent = formatDate(data["Date Comp1"]) || '';
+    document.getElementById('complement2-amount').textContent = data["Complement 2"] ? `${data["Complement 2"]} FCFA` : '';
+    document.getElementById('complement2-date').textContent = formatDate(data["Date Comp2"]) || '';
+    document.getElementById('remaining-amount').textContent = data["Reste à Payer (FCFA)"] ? `${data["Reste à Payer (FCFA)"]} FCFA` : '0 FCFA';
+    document.getElementById('payment-status').textContent = data["Statut de la vente"] || '';
+    
+    // Statut du client
+const statusElement = document.getElementById('client-status');
+const statutVente = data["Statut de la vente"] || 'Non défini'; // Valeur importée
+console.log("Statut de la vente importé:", statutVente); // Affiche "Nouvelle vente" dans la console
+
+// Afficher le statut brut importé
+statusElement.textContent = statutVente;
+    // Charger les historiques
+    await loadPaymentHistory(data["ID client"]);
+    await loadStatusHistory(data["ID client"]);
+}
+
+// Fonction utilitaire pour formater les dates
+function formatDate(dateString) {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR');
+}
+
+async function loadPaymentHistory(clientId) {
+    const paymentHistoryTab = document.getElementById('payment-history');
+    if (!paymentHistoryTab) {
+        console.error("Élément payment-history non trouvé");
+        return;
+    }
+
+    try {
+        paymentHistoryTab.innerHTML = '<tr><td colspan="6">Chargement en cours...</td></tr>';
+        
+        const apiUrl = `https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=getPaymentHistory&clientId=${encodeURIComponent(clientId)}`;
+        
+        const response = await fetch(apiUrl, {
+            mode: 'no-cors', // Ajout essentiel pour CORS
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+
+        // En mode no-cors, nous devons traiter la réponse comme texte
+        const text = await response.text();
+        let result;
+        
+        try {
+            result = JSON.parse(text);
+        } catch (e) {
+            throw new Error("Réponse JSON invalide");
+        }
+
+        if (result.data?.length > 0) {
+            paymentHistoryTab.innerHTML = result.data.map(payment => `
+                <tr>
+                    <td>${payment.id || '-'}</td>
+                    <td>${payment.amount ? `${payment.amount} FCFA` : '-'}</td>
+                    <td>${payment.category || '-'}</td>
+                    <td>${payment.agency || '-'}</td>
+                    <td>${payment.user || '-'}</td>
+                    <td>${formatDate(payment.date)}</td>
+                </tr>
+            `).join('');
+        } else {
+            paymentHistoryTab.innerHTML = '<tr><td colspan="6">Aucun historique trouvé</td></tr>';
+        }
+    } catch (error) {
+        console.error("Erreur:", error);
+        paymentHistoryTab.innerHTML = '<tr><td colspan="6">Erreur de chargement</td></tr>';
+    }
+}
+
+async function loadStatusHistory(clientId) {
+    const statusHistoryTab = document.getElementById('status-history');
+    if (!statusHistoryTab) {
+        console.error("Élément status-history non trouvé");
+        return;
+    }
+
+    try {
+        statusHistoryTab.innerHTML = '<tr><td colspan="4">Chargement...</td></tr>';
+        
+        const apiUrl = `https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=getStatusHistory&clientId=${encodeURIComponent(clientId)}`;
+        
+        const response = await fetch(apiUrl, {
+            mode: 'no-cors', // Ajouté ici aussi
+            redirect: 'follow',
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+
+        const text = await response.text();
+        let result;
+        
+        try {
+            result = JSON.parse(text);
+        } catch (e) {
+            throw new Error("Réponse invalide");
+        }
+
+        if (result.data?.length > 0) {
+            statusHistoryTab.innerHTML = result.data.map(status => `
+                <tr>
+                    <td>${status.oldStatus || '-'}</td>
+                    <td>${status.newStatus || '-'}</td>
+                    <td>${formatDate(status.changeDate)}</td>
+                    <td>${status.user || '-'}</td>
+                </tr>
+            `).join('');
+        } else {
+            statusHistoryTab.innerHTML = '<tr><td colspan="4">Aucun changement</td></tr>';
+        }
+    } catch (error) {
+        console.error("Erreur:", error);
+        statusHistoryTab.innerHTML = '<tr><td colspan="4">Erreur</td></tr>';
+    }
+}
+        
+function printClientDetails() {
+    // Récupération de toutes les données depuis le DOM
+    const clientData = {
+        // Informations client
+        id: document.getElementById('client-id').textContent,
+        name: document.getElementById('client-name').textContent,
+        fullname: document.getElementById('client-fullname').textContent,
+        phone: document.getElementById('client-phone').textContent,
+        birthdate: document.getElementById('client-birthdate').textContent,
+        company: document.getElementById('client-company').textContent,
+        status: document.getElementById('client-status').textContent,
+        
+        // Données médicales OD
+        odSphere: document.getElementById('od-sphere').textContent,
+        odCylinder: document.getElementById('od-cylinder').textContent,
+        odAxis: document.getElementById('od-axis').textContent,
+        odAdd: document.getElementById('od-add').textContent,
+        odDp: document.getElementById('od-dp').textContent,
+        odHeight: document.getElementById('od-height').textContent,
+        
+        // Données médicales OG
+        ogSphere: document.getElementById('og-sphere').textContent,
+        ogCylinder: document.getElementById('og-cylinder').textContent,
+        ogAxis: document.getElementById('og-axis').textContent,
+        ogAdd: document.getElementById('og-add').textContent,
+        ogDp: document.getElementById('og-dp').textContent,
+        ogHeight: document.getElementById('og-height').textContent,
+        
+        // Infos médicales
+        clinic: document.getElementById('clinic').textContent,
+        ophthalmologist: document.getElementById('ophthalmologist').textContent,
+        careDate: document.getElementById('care-date').textContent,
+        
+        // Commande
+        lensType: document.getElementById('lens-type').textContent,
+        lensRange: document.getElementById('lens-range').textContent,
+        frameChoice: document.getElementById('frame-choice').textContent,
+        frameAmount: document.getElementById('frame-amount').textContent,
+        lensAmount: document.getElementById('lens-amount').textContent,
+        agency: document.getElementById('agency').textContent,
+        salesperson: document.getElementById('salesperson').textContent,
+        
+        // Paiement
+        netAmount: document.getElementById('net-amount').textContent,
+        depositAmount: document.getElementById('deposit-amount').textContent,
+        depositDate: document.getElementById('deposit-date').textContent,
+        complement1Amount: document.getElementById('complement1-amount').textContent,
+        complement1Date: document.getElementById('complement1-date').textContent,
+        complement2Amount: document.getElementById('complement2-amount').textContent,
+        complement2Date: document.getElementById('complement2-date').textContent,
+        remainingAmount: document.getElementById('remaining-amount').textContent,
+        paymentStatus: document.getElementById('payment-status').textContent,
+        
+        // Tier payant
+        insurance: document.getElementById('insurance').textContent,
+        insuranceCompany: document.getElementById('insurance-company').textContent,
+        policyNumber: document.getElementById('policy-number').textContent,
+        coverageRate: document.getElementById('coverage-rate').textContent,
+        insuredName: document.getElementById('insured-name').textContent,
+        insurancePart: document.getElementById('insurance-part').textContent
+    };
+
+    // Création du document d'impression
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <title>Fiche Client ${clientData.name}</title>
+            <style>
+                            body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    font-size: 9pt;
+                }
+                
+                .page {
+                    width: 210mm;
+                    height: 148mm; /* Demi-page A4 */
+                    padding: 10mm;
+                    position: relative;
+                }
+                
+                .copy-separator {
+                    border-top: 2px dashed #000;
+                    text-align: center;
+                    padding: 3mm 0;
+                    margin: 2mm 0;
+                    font-weight: bold;
+                }
+                
+                .header, .footer, .section {
+                    margin-bottom: 2mm;
+                }
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    color: #333;
+                    font-size: 9pt;
+                    width: 210mm;
+                    height: 297mm;
+                }
+                
+                /* Conteneur principal */
+                .page-container {
+                    width: 190mm;
+                    height: 277mm;
+                    margin: 10mm auto;
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                /* En-tête */
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 3mm;
+                }
+                
+                .logo-container {
+                    width: 30mm;
+                }
+                
+                .logo-container img {
+                    width: 100%;
+                    height: auto;
+                }
+                
+                .company-info {
+                    text-align: right;
+                    font-size: 8pt;
+                    line-height: 1.2;
+                }
+                
+                /* Titre client */
+                .client-header {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 2mm;
+                    align-items: center;
+                }
+                
+                .client-title {
+                    font-size: 10pt;
+                    font-weight: bold;
+                    color: #4361ee;
+                }
+                
+                .client-status {
+                    font-size: 8pt;
+                    background-color: #f0f7ff;
+                    padding: 1px 6px;
+                    border-radius: 8px;
+                }
+                
+                /* Sections */
+                .section {
+                    margin-bottom: 3mm;
+                }
+                
+                .section-title {
+                    font-size: 9pt;
+                    font-weight: bold;
+                    color: #4361ee;
+                    border-bottom: 1px solid #ddd;
+                    margin-bottom: 1mm;
+                    padding-bottom: 0.5mm;
+                }
+                
+                /* Grilles */
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 2mm;
+                    margin-bottom: 2mm;
+                }
+                
+                .detail-item {
+                    display: flex;
+                    margin-bottom: 0.5mm;
+                    font-size: 8pt;
+                }
+                
+                .detail-label {
+                    font-weight: bold;
+                    min-width: 35mm;
+                }
+                
+                /* Section financière */
+                .financial-section {
+                    margin-bottom: 3mm;
+                }
+                
+                .financial-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 2mm;
+                }
+                
+                .financial-item {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                
+                .financial-label {
+                    font-weight: bold;
+                }
+                
+                /* Section médicale */
+                .medical-section {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 2mm;
+                    margin-bottom: 2mm;
+                }
+                
+                .eye-section {
+                    background-color: #f8fafc;
+                    padding: 2mm;
+                    border-radius: 1mm;
+                    font-size: 8pt;
+                }
+                
+                .eye-title {
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 8pt;
+                    margin-bottom: 1mm;
+                }
+                
+                /* Tier payant */
+                .insurance-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 2mm;
+                }
+                
+                /* Pied de page */
+                .footer {
+                    font-size: 6pt;
+                    text-align: center;
+                    margin-top: auto;
+                    padding-top: 1mm;
+                    border-top: 1px solid #ddd;
+                }
+                
+                @media print {
+                    body {
+                        width: 210mm;
+                        height: 297mm;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="page-container">
+                <!-- En-tête -->
+                <div class="header">
+                    <div class="logo-container">
+                        <img src="logo.png" alt="Digital Optic Logo">
+                    </div>
+                    <div class="company-info">
+                        <strong>DIGITAL OPTIC SARL</strong><br>
+                        0125002578 | IFU: 3214587702<br>
+                        info@digital.com
+                    </div>
+                </div>
+                
+                <!-- Titre client -->
+                <div class="client-header">
+                    <div>
+                        <div class="client-title">FICHE CLIENT #${clientData.id}</div>
+                        <div style="font-size:8pt">${clientData.fullname}</div>
+                    </div>
+                    <div class="client-status">${clientData.status}</div>
+                </div>
+                
+                <!-- Section FINANCIER -->
+                <div class="section financial-section">
+                    <div class="section-title">FINANCIER</div>
+                    <div class="financial-grid">
+                        <div class="financial-item">
+                            <span class="financial-label">Net à payer:</span>
+                            <span>${clientData.netAmount}</span>
+                        </div>
+                        <div class="financial-item">
+                            <span class="financial-label">Acompte:</span>
+                            <span>${clientData.depositAmount} (${clientData.depositDate})</span>
+                        </div>
+                        
+                        ${clientData.complement1Amount ? `
+                        <div class="financial-item">
+                            <span class="financial-label">Complément 1:</span>
+                            <span>${clientData.complement1Amount} (${clientData.complement1Date})</span>
+                        </div>` : ''}
+                        
+                        ${clientData.complement2Amount ? `
+                        <div class="financial-item">
+                            <span class="financial-label">Complément 2:</span>
+                            <span>${clientData.complement2Amount} (${clientData.complement2Date})</span>
+                        </div>` : ''}
+                        
+                        <div class="financial-item">
+                            <span class="financial-label">Reste à payer:</span>
+                            <span>${clientData.remainingAmount}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section TIER PAYANT -->
+                <div class="section">
+                    <div class="section-title">TIER PAYANT</div>
+                    <div class="insurance-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Assurance:</div>
+                            <div>${clientData.insurance}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Compagnie:</div>
+                            <div>${clientData.insuranceCompany}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">N° Police:</div>
+                            <div>${clientData.policyNumber}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Taux couverture:</div>
+                            <div>${clientData.coverageRate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Assuré principal:</div>
+                            <div>${clientData.insuredName}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Part assurance:</div>
+                            <div>${clientData.insurancePart}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section PRESCRIPTION -->
+                <div class="section">
+                    <div class="section-title">PRESCRIPTION MÉDICALE</div>
+                    <div class="medical-section">
+                        <div class="eye-section">
+                            <div class="eye-title">ŒIL DROIT (OD)</div>
+                            <div class="detail-item">
+                                <div class="detail-label">Sph:</div>
+                                <div>${clientData.odSphere}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Cyl:</div>
+                                <div>${clientData.odCylinder}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Axe:</div>
+                                <div>${clientData.odAxis}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ADD:</div>
+                                <div>${clientData.odAdd}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">DP:</div>
+                                <div>${clientData.odDp}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Haut.:</div>
+                                <div>${clientData.odHeight}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="eye-section">
+                            <div class="eye-title">ŒIL GAUCHE (OG)</div>
+                            <div class="detail-item">
+                                <div class="detail-label">Sph:</div>
+                                <div>${clientData.ogSphere}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Cyl:</div>
+                                <div>${clientData.ogCylinder}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Axe:</div>
+                                <div>${clientData.ogAxis}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ADD:</div>
+                                <div>${clientData.ogAdd}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">DP:</div>
+                                <div>${clientData.ogDp}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Haut.:</div>
+                                <div>${clientData.ogHeight}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-container">
+                        <div class="detail-item">
+                            <div class="detail-label">Ophtalmologue:</div>
+                            <div>${clientData.ophthalmologist}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Clinique:</div>
+                            <div>${clientData.clinic}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Date soin:</div>
+                            <div>${clientData.careDate}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section COMMANDE -->
+                <div class="section">
+                    <div class="section-title">DÉTAILS COMMANDE</div>
+                    <div class="grid-container">
+                        <div class="detail-item">
+                            <div class="detail-label">Type verre:</div>
+                            <div>${clientData.lensType}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Gamme verres:</div>
+                            <div>${clientData.lensRange}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Monture:</div>
+                            <div>${clientData.frameChoice}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Montant monture:</div>
+                            <div>${clientData.frameAmount}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Montant verres:</div>
+                            <div>${clientData.lensAmount}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Agence:</div>
+                            <div>${clientData.agency}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Commercial:</div>
+                            <div>${clientData.salesperson}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Pied de page -->
+                <div class="footer">
+                    DIGITAL OPTIC SARL - Capital: 1,200,000 FCFA - RCCM: RB/COT/23 B 35451 - Ecobank BJ: BJ66 BJ06 01006 111509475001 52
+                </div>
+
+            <!-- Séparation -->
+            <div class="copy-separator">COPY BOUTIQUE - À CONSERVER</div>
+            
+            <!-- Version Interne -->
+            <div class="page">
+                <div class="header">
+                    <div style="text-align:center">
+                        <h3>DIGITAL OPTIC - FICHE INTERNE</h3>
+                        <small>ID: ${clientData.id} | ${new Date().toLocaleDateString('fr-FR')}</small>
+                    </div>
+                </div>
+                <!-- Titre client -->
+                <div class="client-header">
+                    <div>
+                        <div class="client-title">FICHE CLIENT #${clientData.id}</div>
+                        <div style="font-size:8pt">${clientData.fullname}</div>
+                    </div>
+                    <div class="client-status">${clientData.status}</div>
+                </div>
+                
+                <!-- Section FINANCIER -->
+                <div class="section financial-section">
+                    <div class="section-title">FINANCIER</div>
+                    <div class="financial-grid">
+                        <div class="financial-item">
+                            <span class="financial-label">Net à payer:</span>
+                            <span>${clientData.netAmount}</span>
+                        </div>
+                        <div class="financial-item">
+                            <span class="financial-label">Acompte:</span>
+                            <span>${clientData.depositAmount} (${clientData.depositDate})</span>
+                        </div>
+                        
+                        ${clientData.complement1Amount ? `
+                        <div class="financial-item">
+                            <span class="financial-label">Complément 1:</span>
+                            <span>${clientData.complement1Amount} (${clientData.complement1Date})</span>
+                        </div>` : ''}
+                        
+                        ${clientData.complement2Amount ? `
+                        <div class="financial-item">
+                            <span class="financial-label">Complément 2:</span>
+                            <span>${clientData.complement2Amount} (${clientData.complement2Date})</span>
+                        </div>` : ''}
+                        
+                        <div class="financial-item">
+                            <span class="financial-label">Reste à payer:</span>
+                            <span>${clientData.remainingAmount}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section TIER PAYANT -->
+                <div class="section">
+                    <div class="section-title">TIER PAYANT</div>
+                    <div class="insurance-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Assurance:</div>
+                            <div>${clientData.insurance}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Compagnie:</div>
+                            <div>${clientData.insuranceCompany}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">N° Police:</div>
+                            <div>${clientData.policyNumber}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Taux couverture:</div>
+                            <div>${clientData.coverageRate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Assuré principal:</div>
+                            <div>${clientData.insuredName}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Part assurance:</div>
+                            <div>${clientData.insurancePart}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section PRESCRIPTION -->
+                <div class="section">
+                    <div class="section-title">PRESCRIPTION MÉDICALE</div>
+                    <div class="medical-section">
+                        <div class="eye-section">
+                            <div class="eye-title">ŒIL DROIT (OD)</div>
+                            <div class="detail-item">
+                                <div class="detail-label">Sph:</div>
+                                <div>${clientData.odSphere}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Cyl:</div>
+                                <div>${clientData.odCylinder}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Axe:</div>
+                                <div>${clientData.odAxis}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ADD:</div>
+                                <div>${clientData.odAdd}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">DP:</div>
+                                <div>${clientData.odDp}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Haut.:</div>
+                                <div>${clientData.odHeight}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="eye-section">
+                            <div class="eye-title">ŒIL GAUCHE (OG)</div>
+                            <div class="detail-item">
+                                <div class="detail-label">Sph:</div>
+                                <div>${clientData.ogSphere}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Cyl:</div>
+                                <div>${clientData.ogCylinder}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Axe:</div>
+                                <div>${clientData.ogAxis}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">ADD:</div>
+                                <div>${clientData.ogAdd}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">DP:</div>
+                                <div>${clientData.ogDp}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Haut.:</div>
+                                <div>${clientData.ogHeight}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid-container">
+                        <div class="detail-item">
+                            <div class="detail-label">Ophtalmologue:</div>
+                            <div>${clientData.ophthalmologist}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Clinique:</div>
+                            <div>${clientData.clinic}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Date soin:</div>
+                            <div>${clientData.careDate}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section COMMANDE -->
+                <div class="section">
+                    <div class="section-title">DÉTAILS COMMANDE</div>
+                    <div class="grid-container">
+                        <div class="detail-item">
+                            <div class="detail-label">Type verre:</div>
+                            <div>${clientData.lensType}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Gamme verres:</div>
+                            <div>${clientData.lensRange}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Monture:</div>
+                            <div>${clientData.frameChoice}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Montant monture:</div>
+                            <div>${clientData.frameAmount}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Montant verres:</div>
+                            <div>${clientData.lensAmount}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Agence:</div>
+                            <div>${clientData.agency}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Commercial:</div>
+                            <div>${clientData.salesperson}</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+ // Fonction pour ouvrir le dialogue d'ajout de complément
+function showComplementDialog() {
+    const modalContainer = document.getElementById('modal-container');
+    const clientId = document.getElementById('client-id').textContent;
+    const clientName = document.getElementById('client-name').textContent;
+
+    const modalHTML = `
+        <div class="dialog-overlay" id="complement-dialog">
+            <div class="dialog-card">
+                <div class="dialog-header">
+                    <h3 class="dialog-title">Ajout de complément</h3>
+                    <button class="dialog-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="dialog-body">
+                    <p class="text-muted">Client: <strong>${clientName}</strong> (ID: ${clientId})</p>
+                    
+                    <form id="complementForm">
+                        <input type="hidden" id="clientId" value="${clientId}">
+                        
+                        <div class="form-group">
+                            <label for="complementAmount" class="form-label">Montant (FCFA)</label>
+                            <input type="number" id="complementAmount" class="form-control" 
+                                   placeholder="5000" required min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="complementDate" class="form-label">Date</label>
+                            <input type="date" id="complementDate" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="complementNotes" class="form-label">Notes</label>
+                            <textarea id="complementNotes" class="form-control" rows="3"
+                                      placeholder="Moyen de paiement, référence..."></textarea>
+                        </div>
+                        <div id="complement-message" class="form-message"></div>
+                    </form>
+                </div>
+                <div class="dialog-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="submitComplementForm()">
+                        <i class="fas fa-check"></i> Enregistrer
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modalContainer.innerHTML = modalHTML;
+    
+    // Définir la date du jour par défaut
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('complementDate').value = today;
+    
+    // Afficher avec animation
+    setTimeout(() => {
+        document.getElementById('complement-dialog').classList.add('active');
+    }, 10);
+}
+
+// Fonction pour soumettre le complément
+async function submitComplementForm() {
+    const form = document.getElementById('complementForm');
+    const formMessage = document.getElementById('complement-message');
+    formMessage.textContent = '';
+    formMessage.className = 'form-message';
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        formMessage.textContent = 'Veuillez remplir tous les champs obligatoires.';
+        formMessage.classList.add('error');
+        return;
+    }
+
+    const complementData = {
+        action: 'addComplement',
+        clientId: document.getElementById('clientId').value,
+        amount: document.getElementById('complementAmount').value.trim(),
+        date: document.getElementById('complementDate').value,
+        notes: document.getElementById('complementNotes').value.trim()
+    };
+
+    const submitButton = document.querySelector('#complement-dialog .btn-primary');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...';
+
+    try {
+        const apiUrl = "https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=addComplement";
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(complementData)
+        });
+
+        formMessage.textContent = '✅ Enregistrement en cours...';
+        formMessage.classList.add('success');
+        
+        // Fermer la modale après un délai
+        setTimeout(() => {
+            closeModal();
+            loadClientData(complementData.clientId);
+        }, 1500);
+
+    } catch (error) {
+        console.error("Erreur:", error);
+        formMessage.innerHTML = `❌ Erreur de connexion au serveur`;
+        formMessage.classList.add('error');
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Enregistrer';
+    }
+}
+
+// Fonction pour fermer la modale (existante)
+function closeModal() {
+    const modal = document.getElementById('complement-dialog');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            document.getElementById('modal-container').innerHTML = '';
+        }, 300);
+    }
+}
+// Fonction pour mettre à jour le statut du deal
+async function updateDealStatus() {
+    console.log('[updateDealStatus] Début de la fonction');
+    const statusSelect = document.getElementById('status-select');
+    const newStatus = statusSelect.value;
+    console.log(`[updateDealStatus] Nouveau statut sélectionné: ${newStatus}`);
+    
+    if (!newStatus) {
+        console.log('[updateDealStatus] Aucun statut sélectionné - abandon');
+        return;
+    }
+    
+    const clientId = document.getElementById('client-id').textContent;
+    const oldStatus = document.getElementById('payment-status').textContent;
+    console.log(`[updateDealStatus] ID Client: ${clientId}, Ancien statut: ${oldStatus}`);
+    
+    if (!clientId) {
+        console.error('[updateDealStatus] ID client non trouvé');
+        showTemporaryMessage("❌ ID client non trouvé", "error", 2000);
+        return;
+    }
+
+    // Message de confirmation
+    if (!confirm(`Voulez-vous vraiment changer le statut de "${oldStatus}" à "${newStatus}" ?`)) {
+        console.log('[updateDealStatus] Utilisateur a annulé la modification');
+        statusSelect.value = oldStatus;
+        return;
+    }
+
+    // Création de l'indicateur de chargement
+    const originalButtonText = statusSelect.innerHTML;
+    statusSelect.disabled = true;
+    statusSelect.innerHTML = `
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Enregistrement...
+    `;
+    console.log('[updateDealStatus] Indicateur de chargement affiché');
+
+    const statusData = {
+        action: 'updateDealStatus',
+        clientId: clientId,
+        oldStatus: oldStatus,
+        newStatus: newStatus
+    };
+    console.log('[updateDealStatus] Données à envoyer:', statusData);
+
+    try {
+        const apiUrl = "https://script.google.com/macros/s/AKfycbysh1x1-9a-sf2fu3Dn83sa1EbG6CpjLlVmbW0Fhkhxfkc2GC1uD55YCf-34CK8QGIv/exec?action=updateDealStatus";
+        console.log(`[updateDealStatus] Envoi des données à: ${apiUrl}`);
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(statusData)
+        });
+        console.log('[updateDealStatus] Réponse du serveur reçue');
+
+        // Mettre à jour le statut affiché
+        document.getElementById('payment-status').textContent = newStatus;
+        console.log('[updateDealStatus] Statut mis à jour dans l\'interface');
+        
+        // Afficher message de succès temporaire
+        showTemporaryMessage("✅ Statut mis à jour avec succès !", "success", 2000);
+        console.log('[updateDealStatus] Message de succès affiché');
+        
+        // Recharger les données du client
+        loadClientData(clientId);
+        console.log('[updateDealStatus] Rechargement des données client initié');
+        
+    } catch (error) {
+        console.error('[updateDealStatus] Erreur:', error);
+        showTemporaryMessage("❌ Erreur lors de la mise à jour du statut", "error", 2000);
+        // Revenir à l'ancienne valeur
+        statusSelect.value = oldStatus;
+        console.log('[updateDealStatus] Retour à l\'ancien statut');
+    } finally {
+        // Réinitialiser le bouton
+        statusSelect.disabled = false;
+        statusSelect.innerHTML = originalButtonText;
+        console.log('[updateDealStatus] Interface réinitialisée');
+    }
+}
+
+// Fonction pour afficher des messages temporaires stylés
+function showTemporaryMessage(message, type, duration) {
+    console.log(`[showTemporaryMessage] Affichage message: ${message} (type: ${type}, durée: ${duration}ms)`);
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `alert-message ${type}`;
+    messageDiv.textContent = message;
+    
+    // Style CSS intégré
+    messageDiv.style.position = 'fixed';
+    messageDiv.style.top = '20px';
+    messageDiv.style.right = '20px';
+    messageDiv.style.padding = '12px 24px';
+    messageDiv.style.borderRadius = '4px';
+    messageDiv.style.color = 'white';
+    messageDiv.style.fontWeight = 'bold';
+    messageDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    messageDiv.style.zIndex = '1000';
+    messageDiv.style.animation = 'fadeIn 0.3s ease-out';
+    
+    // Couleurs selon le type
+    if (type === 'success') {
+        messageDiv.style.backgroundColor = '#4CAF50';
+    } else if (type === 'error') {
+        messageDiv.style.backgroundColor = '#F44336';
+    } else {
+        messageDiv.style.backgroundColor = '#2196F3';
+    }
+    
+    document.body.appendChild(messageDiv);
+    console.log('[showTemporaryMessage] Message ajouté au DOM');
+    
+    // Disparaître après la durée spécifiée
+    setTimeout(() => {
+        console.log('[showTemporaryMessage] Début de la disparition du message');
+        messageDiv.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => {
+            document.body.removeChild(messageDiv);
+            console.log('[showTemporaryMessage] Message retiré du DOM');
+        }, 300);
+    }, duration);
+}
+
+// Ajoutez ce CSS dans votre head pour les animations
+console.log('Initialisation des styles d\'animation');
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-20px); }
+    }
+`;
+document.head.appendChild(style);
+console.log('Styles d\'animation ajoutés');    </script>
+</body>
+</html>
